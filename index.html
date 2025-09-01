@@ -9,13 +9,14 @@
     html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
     .container{padding:20px;max-width:900px;margin:28px auto}
 
-    .topbar{display:flex;gap:12px;align-items:center;justify-content:center;margin-bottom:20px}
+    .topbar{display:flex;gap:12px;align-items:center;justify-content:center;margin-bottom:20px;flex-wrap:wrap}
     .chip{background:#0b0b0b;border:1px solid rgba(255,255,255,0.03);padding:12px 18px;border-radius:12px;cursor:pointer;min-width:140px;text-align:center;user-select:none;transition:all .12s}
     .chip .title{font-weight:700}
     .chip .meta{font-size:12px;color:var(--muted);margin-top:6px}
-    .chip.active{background:linear-gradient(90deg, rgba(0,200,83,0.08), rgba(0,200,83,0.03));box-shadow:0 8px 30px rgba(0,0,0,0.6);border:1px solid rgba(0,200,83,0.25);color:var(--accent)}
+    .chip.active{background:linear-gradient(90deg, rgba(0,200,83,0.1), rgba(0,200,83,0.05));box-shadow:0 8px 30px rgba(0,0,0,0.6);border:1px solid rgba(0,200,83,0.4);color:var(--accent)}
+    .chip.active .meta{color:var(--accent);font-weight:600}
 
-    .center{display:flex;gap:18px;align-items:flex-start;justify-content:center}
+    .center{display:flex;gap:18px;align-items:flex-start;justify-content:center;flex-wrap:wrap}
     .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;width:360px;border:1px solid rgba(255,255,255,0.03)}
     .panel h2{margin:0 0 10px 0;font-size:16px}
     .row{display:flex;align-items:center;gap:10px}
@@ -25,8 +26,7 @@
 
     .footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
 
-    /* responsive */
-    @media (max-width:640px){.topbar{flex-wrap:wrap}.chip{min-width:120px}}
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:#111;padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);color:#dfffe0;box-shadow:0 6px 30px rgba(0,0,0,0.6);display:none;font-size:14px}
   </style>
 </head>
 <body>
@@ -75,14 +75,23 @@
     <div class="footer">Nhấn một chức năng ở trên để bật / tắt. Sensitivity sẽ yêu cầu nhập giá trị khi bật.</div>
   </div>
 
+  <div class="toast" id="toast">Success</div>
+
   <script>
     const chips = document.querySelectorAll('.chip');
     const status = document.getElementById('status');
     const dpiRange = document.getElementById('dpiRange');
+    const toast = document.getElementById('toast');
 
     function updateStatus(){
       const active = Array.from(chips).filter(c=>c.classList.contains('active')).map(c=>c.dataset.key);
       status.textContent = active.length ? 'Bật: ' + active.join(', ') : 'Chưa bật chức năng nào';
+    }
+
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(()=>{toast.style.display='none'},1200);
     }
 
     chips.forEach(chip=>{
@@ -98,7 +107,11 @@
       if(key === 'sensitivity' && isActive){
         const val = prompt('Nhập sensitivity (1-100):','60');
         if(val === null){ chip.classList.remove('active'); chip.setAttribute('aria-pressed','false'); }
-        else { alert('Sensitivity set: ' + val); }
+        else { showToast('Success: Sensitivity ' + val); }
+      } else {
+        if(isActive){
+          showToast('Success: ' + chip.querySelector('.title').textContent);
+        }
       }
 
       updateStatus();
@@ -107,14 +120,14 @@
     document.getElementById('applyBtn').addEventListener('click', ()=>{
       const dpi = dpiRange.value;
       const active = Array.from(chips).filter(c=>c.classList.contains('active')).map(c=>c.dataset.key);
-      alert('Áp dụng: DPI=' + dpi + '
-Chức năng: ' + (active.length?active.join(', '):'Không có'));
+      alert('Áp dụng: DPI=' + dpi + '\nChức năng: ' + (active.length?active.join(', '):'Không có'));
     });
 
     document.getElementById('resetBtn').addEventListener('click', ()=>{
       chips.forEach(c=>{ c.classList.remove('active'); c.setAttribute('aria-pressed','false'); });
       updateStatus();
       dpiRange.value = 150;
+      showToast('Reset hoàn tất');
     });
   </script>
 </body>
