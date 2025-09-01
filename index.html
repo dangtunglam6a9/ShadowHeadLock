@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AIMLOCK - Minimal Black Menu</title>
+  <style>
+    :root{--bg:#000;--muted:#9aa0a6;--accent:#00c853}
+    html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+    .container{padding:20px;max-width:900px;margin:28px auto}
+
+    .topbar{display:flex;gap:12px;align-items:center;justify-content:center;margin-bottom:20px}
+    .chip{background:#0b0b0b;border:1px solid rgba(255,255,255,0.03);padding:12px 18px;border-radius:12px;cursor:pointer;min-width:140px;text-align:center;user-select:none;transition:all .12s}
+    .chip .title{font-weight:700}
+    .chip .meta{font-size:12px;color:var(--muted);margin-top:6px}
+    .chip.active{background:linear-gradient(90deg, rgba(0,200,83,0.08), rgba(0,200,83,0.03));box-shadow:0 8px 30px rgba(0,0,0,0.6);border:1px solid rgba(0,200,83,0.25);color:var(--accent)}
+
+    .center{display:flex;gap:18px;align-items:flex-start;justify-content:center}
+    .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;width:360px;border:1px solid rgba(255,255,255,0.03)}
+    .panel h2{margin:0 0 10px 0;font-size:16px}
+    .row{display:flex;align-items:center;gap:10px}
+
+    .dpislider{width:100%}
+    .small{font-size:13px;color:var(--muted)}
+
+    .footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+
+    /* responsive */
+    @media (max-width:640px){.topbar{flex-wrap:wrap}.chip{min-width:120px}}
+  </style>
+</head>
+<body>
+  <div class="container" role="main">
+    <div style="text-align:center;margin-bottom:8px">
+      <h1 style="margin:0 0 6px 0;font-size:20px">AIMLOCK VIP — Minimal</h1>
+      <div class="small">Nền đen — 4 chức năng trên cùng</div>
+    </div>
+
+    <!-- TOP FUNCTION CHIPS -->
+    <div class="topbar" role="toolbar" aria-label="Chức năng chính">
+      <div class="chip" data-key="headlock" tabindex="0" role="button" aria-pressed="false"><div class="title">HeadLock</div><div class="meta">Khóa tâm</div></div>
+      <div class="chip" data-key="fixlag" tabindex="0" role="button" aria-pressed="false"><div class="title">Fix Lag</div><div class="meta">Tối ưu FPS</div></div>
+      <div class="chip" data-key="nhetam" tabindex="0" role="button" aria-pressed="false"><div class="title">Nhẹ Tâm</div><div class="meta">Giảm recoil</div></div>
+      <div class="chip" data-key="sensitivity" tabindex="0" role="button" aria-pressed="false"><div class="title">Sensitivity</div><div class="meta">Chỉnh độ nhạy</div></div>
+    </div>
+
+    <div class="center">
+      <div class="panel" aria-live="polite">
+        <h2>Thiết lập nhanh</h2>
+        <div class="row" style="margin-bottom:12px">
+          <div style="flex:1">
+            <div class="small">DPI</div>
+            <input class="dpislider" type="range" min="1" max="300" value="150" id="dpiRange" />
+            <div style="display:flex;justify-content:space-between;margin-top:6px"><span class="small">1</span><span class="small">150</span><span class="small">300</span></div>
+          </div>
+        </div>
+
+        <div style="margin-top:6px" class="small">Trạng thái: <span id="status">Chưa bật chức năng nào</span></div>
+      </div>
+
+      <div style="width:320px">
+        <div class="panel">
+          <h2>Hành động</h2>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button id="applyBtn" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:#0b0b0b;color:#fff;cursor:pointer">Áp dụng cấu hình</button>
+            <button id="resetBtn" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:#0b0b0b;color:var(--muted);cursor:pointer">Reset tất cả</button>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+        <div class="small" style="text-align:center;color:var(--muted)">Phiên bản: Minimal — chỉ giao diện</div>
+      </div>
+    </div>
+
+    <div class="footer">Nhấn một chức năng ở trên để bật / tắt. Sensitivity sẽ yêu cầu nhập giá trị khi bật.</div>
+  </div>
+
+  <script>
+    const chips = document.querySelectorAll('.chip');
+    const status = document.getElementById('status');
+    const dpiRange = document.getElementById('dpiRange');
+
+    function updateStatus(){
+      const active = Array.from(chips).filter(c=>c.classList.contains('active')).map(c=>c.dataset.key);
+      status.textContent = active.length ? 'Bật: ' + active.join(', ') : 'Chưa bật chức năng nào';
+    }
+
+    chips.forEach(chip=>{
+      chip.addEventListener('click', ()=> toggle(chip));
+      chip.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); toggle(chip);} });
+    });
+
+    function toggle(chip){
+      const key = chip.dataset.key;
+      const isActive = chip.classList.toggle('active');
+      chip.setAttribute('aria-pressed', String(isActive));
+
+      if(key === 'sensitivity' && isActive){
+        const val = prompt('Nhập sensitivity (1-100):','60');
+        if(val === null){ chip.classList.remove('active'); chip.setAttribute('aria-pressed','false'); }
+        else { alert('Sensitivity set: ' + val); }
+      }
+
+      updateStatus();
+    }
+
+    document.getElementById('applyBtn').addEventListener('click', ()=>{
+      const dpi = dpiRange.value;
+      const active = Array.from(chips).filter(c=>c.classList.contains('active')).map(c=>c.dataset.key);
+      alert('Áp dụng: DPI=' + dpi + '
+Chức năng: ' + (active.length?active.join(', '):'Không có'));
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', ()=>{
+      chips.forEach(c=>{ c.classList.remove('active'); c.setAttribute('aria-pressed','false'); });
+      updateStatus();
+      dpiRange.value = 150;
+    });
+  </script>
+</body>
+</html>
