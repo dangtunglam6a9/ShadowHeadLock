@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AIMLOCK - Minimal Black Menu</title>
+  <title>ShadowHeadLock- Menu</title>
   <style>
     :root{--bg:#000;--muted:#9aa0a6;--accent:#00c853}
     html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
@@ -32,16 +32,16 @@
 <body>
   <div class="container" role="main">
     <div style="text-align:center;margin-bottom:8px">
-      <h1 style="margin:0 0 6px 0;font-size:20px">AIMLOCK VIP — Minimal</h1>
-      <div class="small">Nền đen — 4 chức năng trên cùng</div>
+      <h1 style="margin:0 0 6px 0;font-size:20px">ShadowHeadLock Menu</h1>
+      <div class="small"TungLam X Tnghia</div>
     </div>
 
     <!-- TOP FUNCTION CHIPS -->
     <div class="topbar" role="toolbar" aria-label="Chức năng chính">
-      <div class="chip" data-key="headlock" tabindex="0" role="button" aria-pressed="false"><div class="title">HeadLock</div><div class="meta">Khóa tâm</div></div>
-      <div class="chip" data-key="fixlag" tabindex="0" role="button" aria-pressed="false"><div class="title">Fix Lag</div><div class="meta">Tối ưu FPS</div></div>
-      <div class="chip" data-key="nhetam" tabindex="0" role="button" aria-pressed="false"><div class="title">Nhẹ Tâm</div><div class="meta">Giảm recoil</div></div>
-      <div class="chip" data-key="sensitivity" tabindex="0" role="button" aria-pressed="false"><div class="title">Sensitivity</div><div class="meta">Chỉnh độ nhạy</div></div>
+      <div class="chip" data-key="HeadLock" tabindex="0" role="button" aria-pressed="false"><div class="title">HeadLock</div><div class="meta">Bám Đầu</div></div>
+      <div class="chip" data-key="FixLag" tabindex="0" role="button" aria-pressed="false"><div class="title">Fix Lag</div><div class="meta">Ổn Định FPs</div></div>
+      <div class="chip" data-key="NheTam" tabindex="0" role="button" aria-pressed="false"><div class="title">Nhẹ Tâm</div><div class="meta">Tâm Chuẩn</div></div>
+      <div class="chip" data-key="Sensitivity" tabindex="0" role="button" aria-pressed="false"><div class="title">Sensitivity</div><div class="meta">Nhạy Màn</div></div>
     </div>
 
     <div class="center">
@@ -51,28 +51,28 @@
           <div style="flex:1">
             <div class="small">DPI</div>
             <input class="dpislider" type="range" min="1" max="300" value="150" id="dpiRange" />
-            <div style="display:flex;justify-content:space-between;margin-top:6px"><span class="small">1</span><span class="small">150</span><span class="small">300</span></div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px"><span class="small">1</span><span class="small">120</span><span class="small">240</span></div>
           </div>
         </div>
 
-        <div style="margin-top:6px" class="small">Trạng thái: <span id="status">Chưa bật chức năng nào</span></div>
+        <div style="margin-top:6px" class="small">Trạng thái: <span id="status">Chưa Bật Chức Năng Nào</span></div>
       </div>
 
       <div style="width:320px">
         <div class="panel">
           <h2>Hành động</h2>
           <div style="display:flex;flex-direction:column;gap:8px">
-            <button id="applyBtn" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:#0b0b0b;color:#fff;cursor:pointer">Áp dụng cấu hình</button>
+            <button id="applyBtn" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:#0b0b0b;color:#fff;cursor:pointer">Cài Đặt Config</button>
             <button id="resetBtn" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:#0b0b0b;color:var(--muted);cursor:pointer">Reset tất cả</button>
           </div>
         </div>
 
         <div style="height:12px"></div>
-        <div class="small" style="text-align:center;color:var(--muted)">Phiên bản: Minimal — chỉ giao diện</div>
+        <div class="small" style="text-align:center;color:var(--muted)">Phiên bản:Menu Vip</div>
       </div>
     </div>
 
-    <div class="footer">Nhấn một chức năng ở trên để bật / tắt. Sensitivity sẽ yêu cầu nhập giá trị khi bật.</div>
+    <div class="footer">Nhấn một chức năng ở trên để bật / tắt.</div>
   </div>
 
   <div class="toast" id="toast">Success</div>
@@ -105,7 +105,7 @@
       chip.setAttribute('aria-pressed', String(isActive));
 
       if(key === 'sensitivity' && isActive){
-        const val = prompt('Nhập sensitivity (1-100):','60');
+        const val = prompt('Nhập sensitivity (1-120):','60');
         if(val === null){ chip.classList.remove('active'); chip.setAttribute('aria-pressed','false'); }
         else { showToast('Success: Sensitivity ' + val); }
       } else {
